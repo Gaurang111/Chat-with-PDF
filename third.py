@@ -21,10 +21,9 @@ from langchain_openai import OpenAI
 import os
 import streamlit as st
 
-# from LangChain.keys import OPENAI_API_KEY
-from keys import OPENAI_API_KEY
 
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
+llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 
 def process_pdf_file(pdffile):
     try:
@@ -52,7 +51,7 @@ def process_pdf_file(pdffile):
         embeddings = OpenAIEmbeddings()
 
         document_search = FAISS.from_texts(texts, embeddings)
-        chain = load_qa_chain(OpenAI(), chain_type="stuff")
+        chain = load_qa_chain(llm, chain_type="stuff")
 
         query=st.text_input("Write your query here...")
         # query = "what is the age group for vaccination of girls for prevention of cervical cancer"
